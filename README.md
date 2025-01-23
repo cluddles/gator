@@ -20,25 +20,27 @@ DB needs to be created in Postgres:
 CREATE DATABASE gator;
 ```
 
+The next couple of steps refer to `postgres_url`, which is the DB connection string of the form `protocol://username:password@host:port/database`.
+
+This might look something like `postgres://postgres:postgres@localhost:5432/gator`
+
 Apply the DB schema with goose:
 ```
 # install goose
 go install github.com/pressly/goose/v3/cmd/goose@latest
 
 # go into sql/schema dir and run goose against the upversion defs
-# postgres_url is the connection string, of the form:
-#   protocol://username:password@host:port/database
 cd sql/schema
 goose postgres "[postgres_url]" up
 ```
 
 The application expects a JSON configuration file in your HOME directory, `~/.gatorconfig.json`. This tells the application where to connect to the DB (and it is also used to store the active user across executions).
-
 ```
 {
-    "db_url" : "[postgres_url]" ,
+    "db_url" : "[postgres_url]",
 }
 ```
+You may find the `postgres_url` here requires the `?sslmode=disable` suffix.
 
 ## Usage
 

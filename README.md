@@ -15,14 +15,14 @@ See [boot.dev - Build a Blog Aggregator](https://www.boot.dev/lessons/14b7179b-c
 
 ## Initialisation
 
-DB needs to be created in Postgres:
+You'll need a fresh database in Postgres:
 ```
 CREATE DATABASE gator;
 ```
 
-The next couple of steps refer to `postgres_url`, which is the DB connection string of the form `protocol://username:password@host:port/database`.
+The next couple of steps refer to `postgres_url`, which is the DB connection string (for the aforementioned fresh database) of the form `protocol://username:password@host:port/database`
 
-This might look something like `postgres://postgres:postgres@localhost:5432/gator`
+(e.g. `postgres://postgres:postgres@localhost:5432/gator`)
 
 Apply the DB schema with goose:
 ```
@@ -34,7 +34,7 @@ cd sql/schema
 goose postgres "[postgres_url]" up
 ```
 
-The application expects a JSON configuration file in your HOME directory, `~/.gatorconfig.json`. This tells the application where to connect to the DB (and it is also used to store the active user across executions).
+The application expects a JSON configuration file in your HOME directory, `~/.gatorconfig.json`. This tells the application where to find the DB (and it is also used to store the active user across executions).
 ```
 {
     "db_url" : "[postgres_url]",

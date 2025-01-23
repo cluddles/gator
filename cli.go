@@ -53,6 +53,8 @@ func cliExec(s *state, args []string) error {
 
 	commands.register("agg", handlerAgg)
 
+	commands.register("browse", middlewareLoggedIn(handlerBrowse))
+
 	if len(args) < 2 {
 		return fmt.Errorf("at least one arg required, but got %v", args[1:])
 	}

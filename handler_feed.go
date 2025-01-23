@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gator/internal/database"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,5 +52,33 @@ func handlerFeeds(s *state, cmd command) error {
 		log.Printf("%v (%v) - %v", f.Name, f.Url, f.UserName)
 	}
 
+	return nil
+}
+
+func handlerBrowse(s *state, cmd command, user database.User) error {
+	if len(cmd.args) > 1 {
+		return fmt.Errorf("expects 0 or 1 args")
+	}
+
+	limit := 2
+	if len(cmd.args) == 1 {
+		customLimit, err := strconv.Atoi(cmd.args[1])
+		if err != nil {
+			return err
+		}
+		limit = customLimit
+	}
+
+	posts, err := s.db.GetPostsForUser(context.Background(), database.GetPostsForUserParams{
+		UserID: user.ID,
+		Limit:  int32(limit),
+	})
+	if err != nil {
+		return err
+	}
+
+	for _, p := range posts {
+		log.Printf("%v: %v\n", p.Title, p.Description)
+	}
 	return nil
 }
